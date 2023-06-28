@@ -1,1 +1,3 @@
-const [values1, values2] = process.argv.slice(2);
+const { readFile } = require('./copy-file')
+
+readFile('origen.txt')
