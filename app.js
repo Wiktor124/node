@@ -1,28 +1,17 @@
-const fs = require('fs');
-const path = require('path');
 
-fs.readFile(path.join(__dirname, 'files/hello.csv'), 'utf-8', (error, data) => {
-  if (error) throw error;
+const { createFile, readFile } = require('./files')
 
-  const lines = data.split('\n');
-  const objects = [];
+async function run() {
+  const value = process.argv.slice(2);
 
-  for (const line of lines) {
-    const [name, lastName, age] = line.split(',');
+  await readFile('datos.txt', 'Ejercicio 1:');
+  await createFile('frases.txt', value);
 
-    objects.push({ name, lastName, age });
-  }
+  await readFile('frases.txt', 'Ejercicio 2:');
 
-  console.log(objects);
+  await readFile('numeros.txt', 'Ejercicio 3:');
+  await readFile('original.txt', '- Archivo con original:');
+}
+run().catch(err => {
+  console.error('Error:', err);
 });
-
-fs.writeFile(path.join(__dirname, 'files/test.csv'), 'torvi rap22', (err) => {
-  if (err) throw new err;
-
-  console.log('Funcionó');
-});
-
-process.on('uncaughtException', (err) => {
-  console.log('Paso algo!', err);
-  process.exit(1);
-})
