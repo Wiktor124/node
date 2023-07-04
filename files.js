@@ -1,43 +1,25 @@
 const fs = require("fs");
 const path = require("path");
 
-
-function createFile(file, data) {
-  
-  return new Promise((resolve, reject) => {
-    let dataFlag = !isNaN(data) ? "" + data : data.join(" ");
-
-    fs.writeFile(path.join(__dirname, `files/${file}`), dataFlag, (err) => {
-      if (err) reject(err);
-
-      resolve();
-    });
-  });
-}
-
-function readFile(file, title) {
-  return new Promise((resolve, reject) => {
-
-    fs.readFile(path.join(__dirname, `files/${file}`), "utf8", async (err, data) => {
-      if (err) reject(err);
-      // if(file === 'original.txt') return;
-
+function readFile(file, text) {
+  return fs.readFile(path.join(__dirname, file), "utf8", async (err, data) => {
+    if(err) throw new Error('Oops paso algo!');
+    
+    const palabras = data.split(" ");
+    const palabrasRepetidas = []
+    
+    for (let i = 0; i < palabras.length; i++) {
       
-      if (!isNaN(data[0])) {
-        await createFile('original.txt', [data])
-        const numeros = data.split(",");
-        let sumatoria = 0;
-        
-        for (let i = 0; i < numeros.length; i++) {
-          sumatoria += Number(numeros[i]);
-        }
-        
-        createFile("numeros.txt", sumatoria);
+      if(String(text) === palabras[i]) {
+        palabrasRepetidas.push(palabras[i])
       }
-      console.log(`${title} ${data}`);
-      resolve();
-    });
+    }
+
+    if(palabrasRepetidas.length === 0) {
+      console.log(`La palabra "${text}" no existe en el archivo ${file}`);
+    } else {
+      console.log(`La palabra "${text}" se repite ${palabrasRepetidas.length} veces`);
+    }
   });
 }
-// 1, 2, 4, 5, 5, 6
-module.exports = { createFile, readFile };
+module.exports = { readFile };
