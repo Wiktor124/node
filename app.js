@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.status(200).send('¡Bienvenido al servidor HTTP usando Express!')
@@ -13,12 +14,11 @@ app.get('/task', (req, res) => {
 })
 
 app.post('/task', (req, res) => {
-  // const { name, description } = req.body;
-  console.log(req.body);
+  const { id, nombre, descripcion } = req.body;
+  db.push({ id, nombre, descripcion })
 
-  // db.push({ id, name, description });
-  res.status(201).json({ message: 'Tarea agregada exitosamente.' });
-});
+  res.send('Se agrego una tarea!');
+})
 
 // app.get('/image/:username', (req, res) => {
 //   const { username } = req.params;
